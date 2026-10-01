@@ -66,7 +66,7 @@ services:
       - kafka_data:/var/lib/kafka/data
 
     healthcheck:
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      test: ["CMD-SHELL", "nc -z -w 2 localhost 9092"]
       interval: 10s
       timeout: 10s
       retries: 12
@@ -97,6 +97,10 @@ services:
       MONGO_DB: driveshield
       KAFKA_BOOTSTRAP_SERVERS: kafka:9093
       KAFKA_TELEMETRY_TOPIC: vehicle-telemetry
+      AUTH_USERNAME: ${AUTH_USERNAME:-fleet_manager}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-change-me-now}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-only-change-this-secret}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-60}
     depends_on:
       postgres:
         condition: service_healthy

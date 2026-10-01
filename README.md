@@ -22,6 +22,8 @@ docker compose up --build
 
 Open the dashboard at http://localhost:3000, Swagger at http://localhost:8000/docs, the API at http://localhost:8000, and Kafka UI at http://localhost:8080.
 
+The dashboard requires fleet-manager login. Set `AUTH_USERNAME`, `AUTH_PASSWORD`, and `JWT_SECRET_KEY` in your local `.env` before starting Compose; the fallback values are for development only. The login endpoint is `POST /api/auth/login`.
+
 ## Run locally
 
 Start infrastructure first with `docker compose up postgres mongodb kafka kafka-ui`. In a second PowerShell window:
@@ -48,6 +50,7 @@ For a quick recording-friendly stream, use `python vehicle_simulator.py --demo -
 
 ## API
 
+- `POST /api/auth/login` returns a Bearer JWT for the configured fleet manager.
 - `GET /` and `GET /health`
 - `GET /api/dashboard/summary`
 - `GET /api/alerts?severity=HIGH&anomaly_type=Overspeed&page=1&page_size=25`
@@ -73,4 +76,4 @@ The k6 script posts representative events to the optional HTTP ingestion endpoin
 
 ## Known limitations and future improvements
 
-The MVP uses an in-memory duplicate cache, creates profiles on first observation, has no authentication, and uses polling rather than WebSockets. Future work can add durable idempotency, retry/dead-letter handling, richer geofences, authentication, retention policies, charts, and measured load-test reports. No performance number should be inferred without measuring the target environment.
+The MVP uses an in-memory duplicate cache, creates profiles on first observation, uses local fleet-manager JWT authentication, and uses polling rather than WebSockets. Future work can add durable idempotency, retry/dead-letter handling, richer geofences, external identity providers, retention policies, charts, and measured load-test reports. No performance number should be inferred without measuring the target environment.

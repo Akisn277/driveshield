@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { getAnalytics } from '../../lib/api';
-export const dynamic='force-dynamic';
-export default async function Analytics(){const data=await getAnalytics().catch(()=>({by_type:{},by_severity:{},over_time:[]}));return <><div className="eyebrow">Operations / historical</div><h1>Analytics</h1><section className="dashboard-grid"><div className="panel"><h2>Anomalies by type</h2>{Object.entries(data.by_type||{}).map(([key,value])=><div className="alert" key={key}><span>{key}</span><b>{value as number}</b></div>)}</div><div className="panel"><h2>Anomalies by severity</h2>{Object.entries(data.by_severity||{}).map(([key,value])=><div className="alert" key={key}><span className={`badge ${key}`}>{key}</span><b>{value as number}</b></div>)}</div></section></>}
+
+export default function Analytics() { const [data, setData] = useState<any>({ by_type: {}, by_severity: {}, over_time: [] }); useEffect(() => { getAnalytics().then(setData).catch(() => {}); }, []); return <><div className="eyebrow">Operations / historical</div><h1>Analytics</h1><section className="dashboard-grid"><div className="panel"><h2>Anomalies by type</h2>{Object.entries(data.by_type || {}).map(([key, value]) => <div className="alert" key={key}><span>{key}</span><b>{value as number}</b></div>)}</div><div className="panel"><h2>Anomalies by severity</h2>{Object.entries(data.by_severity || {}).map(([key, value]) => <div className="alert" key={key}><span className={`badge ${key}`}>{key}</span><b>{value as number}</b></div>)}</div></section></>; }

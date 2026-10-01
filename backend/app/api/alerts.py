@@ -3,8 +3,9 @@ from sqlalchemy.orm import Session
 
 from app.database.postgres import get_db
 from app.models.alert import Alert
+from app.services.auth import require_fleet_manager
 
-router = APIRouter(prefix="/api/alerts", tags=["alerts"])
+router = APIRouter(prefix="/api/alerts", tags=["alerts"], dependencies=[Depends(require_fleet_manager)])
 
 
 def serialize(alert: Alert) -> dict:

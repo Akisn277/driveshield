@@ -6,8 +6,9 @@ from app.database.postgres import get_db
 from app.models.alert import Alert
 from app.models.anomaly_event import AnomalyEvent
 from app.models.vehicle import Vehicle
+from app.services.auth import require_fleet_manager
 
-router = APIRouter(prefix="/api/vehicles", tags=["vehicles"])
+router = APIRouter(prefix="/api/vehicles", tags=["vehicles"], dependencies=[Depends(require_fleet_manager)])
 
 
 def alert_dict(alert: Alert) -> dict:
